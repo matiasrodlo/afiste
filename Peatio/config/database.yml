@@ -1,0 +1,30 @@
+default: &default
+  adapter: <%= ENV.fetch('DATABASE_ADAPTER', 'mysql2') %>
+  encoding: utf8
+  support_json: <%= ENV.fetch('DATABASE_SUPPORT_JSON', 'true') %>
+  collation: <%= ENV.fetch('DATABASE_COLLATION', 'utf8_general_ci') %>
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS", 8).to_i * ENV.fetch("WEB_CONCURRENCY", 1).to_i %>
+  host: <%= ENV.fetch('DATABASE_HOST', '127.0.0.1') %>
+  port: <%= ENV.fetch('DATABASE_PORT', 3306) %>
+  username: <%= ENV.fetch('DATABASE_USER', 'root') %>
+  password: <%= ENV['DATABASE_PASS'] %>
+
+development:
+  <<: *default
+  database: peatio_development
+
+test:
+  <<: *default
+  database: peatio_test
+
+production:
+  <<: *default
+  database: <%= ENV.fetch('DATABASE_NAME', 'peatio_production') %>
+
+archive_db:
+  <<: *default
+  url: <%= ENV['ARCHIVE_DATABASE_URL'] %>
+  database: <%= ENV.fetch('ARCHIVE_DATABASE_NAME', 'peatio_archive_db') %>
+  username: <%= ENV.fetch('ARCHIVE_DATABASE_USER', 'root') %>
+  password: <%= ENV['ARCHIVE_DATABASE_PASS'] %>
+  host: <%= ENV.fetch('ARCHIVE_DATABASE_HOST', '127.0.0.1') %>
