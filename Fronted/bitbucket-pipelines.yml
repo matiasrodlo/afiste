@@ -1,0 +1,25 @@
+# This is a sample build configuration for JavaScript.
+# Check our guides at https://confluence.atlassian.com/x/14UWN for more examples.
+# Only use spaces to indent your .yml configuration.
+# -----
+# You can specify a custom docker image from Docker Hub as your build environment.
+image: node:10.15.3
+
+pipelines:
+  default:
+    - step:
+        script:
+          - echo "This script runs on all branches that don't have any specific pipeline assigned in 'branches'."
+  branches:
+    master:
+      - step:
+          script:
+            - echo "This script runs only on commit to the master branch."
+            - npm install
+            - npm run build
+    development:
+      - step:
+          script:
+            - echo "This script runs only on commit to development. (feature/* to others branchs)"
+            - npm install
+            - npm run build
