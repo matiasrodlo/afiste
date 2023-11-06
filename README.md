@@ -22,3 +22,7 @@ Por eso, Afiste tiene como objetivo:
 Al hacer más líquidos estos instrumentos, se busca aumentar la cantidad de capital disponible en el mercado de fondos para las startups y pymes. De esta forma, se lograrán potenciar los procesos de innovación y, los esfuerzos por transformar la base productiva de las economías en Latinoamérica.
 
 Desde su inicio, Afiste ha priorizado el trabajo colaborativo basado en la cocreación, trabajo con reguladores y en la construcción de un ecosistema para su lanzamiento comercial. Además, la empresa ha desarrollado el marco para emitir y listar activos y generar alianzas estratégicas con actores clave en su cadena de valor.
+
+Pitch: https://www.youtube.com/watch?v=_oshvfDnEXo
+<br>
+Flujo Marketplace VCs: https://www.youtube.com/watch?v=aYAxnTVyINg
