@@ -10,9 +10,13 @@ La nueva era de los activos digitales ofrece oportunidades únicas para brindar 
 Por eso, Afiste tiene como objetivo:
 
 ⦁ Proporcionar una solución mediante la implementación de un proceso de tokenización de cartera, convirtiendo activos tradicionales a formato digital;
+<br>
 ⦁ Habilitar a tenedores a ofrecer estos activos digitales a otros inversores a través de una plataforma por medio de ofertas iniciales; 
+<br>
 ⦁ Listar estos activos digitales en el marketplace de Afiste y, garantizar transacciones en un mercado secundario;
+<br>
 ⦁ Controlar el cumplimiento y la ejecución de flujos de pago; 
+<br>
 ⦁ Crear un ecosistema end-to-end que permita tanto a inversores retail como inversores profesionales o institucionales, acceder al venture capital, a través, de la creación de una nueva clase de activos financieros digitales y negociables.
 
 Al hacer más líquidos estos instrumentos, se busca aumentar la cantidad de capital disponible en el mercado de fondos para las startups y pymes. De esta forma, se lograrán potenciar los procesos de innovación y, los esfuerzos por transformar la base productiva de las economías en Latinoamérica.
