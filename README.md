@@ -1,6 +1,8 @@
 # afiste
 Jump Chile 2019: Marketplace: Tokenized venture capital assets
 
+![flujo2](https://github.com/matiasrodlo/skorin/assets/52969662/b43b429f-7c4e-4836-9ce3-a0e36ca90ceb)
+
 El Venture Capital es uno de los mayores contribuyentes al desarrollo de innovación tecnológica. Ha aportado con inversiones a un 43% de las empresas que hoy cotizan en las bolsas de Estados Unidos. Además, es una atractiva categoría de inversión, producto de que genera retornos muy superiores a la media.
 
 Dicho esto, también hay varias restricciones dentro de la industria. Los mayores obstáculos son: La baja liquidez, ya que tarda un tiempo considerable para generar ganancias (Un fondo de venture capital en promedio bloquea la inversión por un período de 10-12 años). Además de las altas barreras de inversión (El monto mínimo de entradas comienza en 500 mil dólares); y altos riesgos asociado a este tipo de inversiones. Estos obstáculos desincentivan a un gran número de inversores potenciales, tanto inversores profesionales como instituciones financieras.
