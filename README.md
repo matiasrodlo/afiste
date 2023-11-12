@@ -1,33 +1,31 @@
 # afiste
-Jump Chile 2019: Marketplace: Tokenized venture capital assets
+Jump Chile: Marketplace: Tokenized venture capital assets (2019)
 
 **Pitch:** https://youtu.be/_oshvfDnEXo
 
-El Venture Capital es uno de los mayores contribuyentes al desarrollo de innovación tecnológica. Ha aportado con inversiones a un 43% de las empresas que hoy cotizan en las bolsas de Estados Unidos. Además, es una atractiva categoría de inversión, producto de que genera retornos muy superiores a la media.
+Venture Capital is one of the major contributors to the development of technological innovation. It has invested in 43% of the companies currently listed on the stock exchanges in the United States. Furthermore, it is an attractive investment category, as it generates returns well above the average.
 
-Dicho esto, también hay varias restricciones dentro de la industria. Los mayores obstáculos son: La baja liquidez, ya que tarda un tiempo considerable para generar ganancias (Un fondo de venture capital en promedio bloquea la inversión por un período de 10-12 años). Además de las altas barreras de inversión (El monto mínimo de entradas comienza en 500 mil dólares); y altos riesgos asociado a este tipo de inversiones. Estos obstáculos desincentivan a un gran número de inversores potenciales, tanto inversores profesionales como instituciones financieras.
+That being said, there are several constraints within the industry. The major obstacles include low liquidity, as it takes a considerable amount of time to generate profits (an average venture capital fund locks in investments for a period of 10-12 years). In addition, there are high barriers to entry (the minimum entry amount starts at $500,000), and there are high risks associated with this type of investment. These obstacles discourage a significant number of potential investors, both professional investors and financial institutions.
 
-La nueva era de los activos digitales ofrece oportunidades únicas para brindar soluciones de liquidez rentables. En este marco, Afiste es una empresa de Fintech que ofrece una plataforma digital que busca cumplir tanto con las normativas de emisión de activos como de mercado, con el objeto de fomentar y proporcionar un ecosistema donde los fondos de venture capital podrán aumentar su capital, tokenizar sus carteras de inversión y venderlos como activos digitales. Al hacerlo, se estará creando una nueva herramienta la cual permitirá aumentar la liquidez del mercado de Venture Capital y volumen de inversión.
+The new era of digital assets offers unique opportunities to provide profitable liquidity solutions. In this context, Afiste is a Fintech that offers a digital platform aiming to comply with both asset issuance and market regulations. The goal is to foster an ecosystem where venture capital funds can increase their capital, tokenize their investment portfolios, and sell them as digital assets. By doing so, a new tool will be created to increase liquidity in the Venture Capital market and investment volume.
 
-Por eso, Afiste tiene como objetivo:
+Therefore, Afiste aims to:
 
-⦁ Proporcionar una solución mediante la implementación de un proceso de tokenización de cartera, convirtiendo activos tradicionales a formato digital;
-<br>
-⦁ Habilitar a tenedores a ofrecer estos activos digitales a otros inversores a través de una plataforma por medio de ofertas iniciales; 
-<br>
-⦁ Listar estos activos digitales en el marketplace de Afiste y, garantizar transacciones en un mercado secundario;
-<br>
-⦁ Controlar el cumplimiento y la ejecución de flujos de pago; 
-<br>
-⦁ Crear un ecosistema end-to-end que permita tanto a inversores retail como inversores profesionales o institucionales, acceder al venture capital, a través, de la creación de una nueva clase de activos financieros digitales y negociables.
+Provide a solution by implementing a portfolio tokenization process, converting traditional assets into digital format.
+Enable holders to offer these digital assets to other investors through initial offerings on the platform.
+List these digital assets on Afiste's marketplace and ensure transactions in a secondary market.
+Monitor compliance and execution of payment flows.
+Create an end-to-end ecosystem that allows both retail and professional or institutional investors to access venture capital through the creation of a new class of digital and tradable financial assets.
+By making these instruments more liquid, the goal is to increase the amount of capital available in the funds market for startups and SMEs. In this way, efforts to drive innovation and transform the productive base of economies in Latin America will be empowered.
 
-Al hacer más líquidos estos instrumentos, se busca aumentar la cantidad de capital disponible en el mercado de fondos para las startups y pymes. De esta forma, se lograrán potenciar los procesos de innovación y, los esfuerzos por transformar la base productiva de las economías en Latinoamérica.
+Since its inception, Afiste has prioritized collaborative work based on co-creation, engagement with regulators, and the construction of an ecosystem for its commercial launch. Additionally, the company has developed a framework for issuing and listing assets and has formed strategic alliances with key players in its value chain.
 
-Desde su inicio, Afiste ha priorizado el trabajo colaborativo basado en la cocreación, trabajo con reguladores y en la construcción de un ecosistema para su lanzamiento comercial. Además, la empresa ha desarrollado el marco para emitir y listar activos y generar alianzas estratégicas con actores clave en su cadena de valor.
+**Trading Exchange UI:**
+  <a href="https://youtu.be/fx_i9NkrB8g">
+    <img src="https://github-production-user-asset-6210df.s3.amazonaws.com/52969662/282203775-735cbafd-0789-427c-8d73-7a7a8d4f6def.png" alt="Trading Exchange UI">
+  </a>
 
-**Marketplace:**
-![plataforma](https://github.com/matiasrodlo/afiste/assets/52969662/735cbafd-0789-427c-8d73-7a7a8d4f6def)
-
-**Flujo Marketplace VCs:** https://youtu.be/fx_i9NkrB8g
-![flujo2](https://github.com/matiasrodlo/skorin/assets/52969662/b43b429f-7c4e-4836-9ce3-a0e36ca90ceb)
-<br>
+**Venture Capital Marketplace Flow:** https://youtu.be/fx_i9NkrB8g
+  <a href="https://youtu.be/fx_i9NkrB8g">
+    <img src="https://github-production-user-asset-6210df.s3.amazonaws.com/52969662/280883110-b43b429f-7c4e-4836-9ce3-a0e36ca90ceb.png" alt="Flujo Marketplace VCs">
+  </a>
