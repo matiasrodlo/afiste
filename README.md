@@ -13,7 +13,7 @@ That being said, there are several constraints within the industry. The major ob
 The new era of digital assets offers unique opportunities to provide profitable liquidity solutions. In this context, Afiste is a Fintech that offers a digital platform aiming to comply with both asset issuance and market regulations. The goal is to foster an ecosystem where venture capital funds can increase their capital, tokenize their investment portfolios, and sell them as digital assets. By doing so, a new tool will be created to increase liquidity in the Venture Capital market and investment volume.
 
 
-**Project Background:**
+**Context:**
 <br>
 
 This project was developed during my second semester of Business Administration while simultaneously participating in Jump Chile, a business idea acceleration program focused on higher education students in Chile and Latin America. The program is organized by the Catholic University of Chile through the UC Innovation Center.
