@@ -1,7 +1,7 @@
 # afiste
 Jump Chile 2019: Marketplace: Tokenized venture capital assets
 
-**Pitch:** https://www.youtube.com/watch?v=_oshvfDnEXo
+**Pitch:** https://youtu.be/_oshvfDnEXo
 
 El Venture Capital es uno de los mayores contribuyentes al desarrollo de innovación tecnológica. Ha aportado con inversiones a un 43% de las empresas que hoy cotizan en las bolsas de Estados Unidos. Además, es una atractiva categoría de inversión, producto de que genera retornos muy superiores a la media.
 
@@ -28,6 +28,6 @@ Desde su inicio, Afiste ha priorizado el trabajo colaborativo basado en la cocre
 **Marketplace:**
 ![plataforma](https://github.com/matiasrodlo/afiste/assets/52969662/735cbafd-0789-427c-8d73-7a7a8d4f6def)
 
-**Flujo Marketplace VCs:** https://www.youtube.com/watch?v=aYAxnTVyINg
+**Flujo Marketplace VCs:** https://youtu.be/fx_i9NkrB8g
 ![flujo2](https://github.com/matiasrodlo/skorin/assets/52969662/b43b429f-7c4e-4836-9ce3-a0e36ca90ceb)
 <br>
