@@ -1,3 +1,0 @@
-# Deploy Peatio with Docker
-
-This document is in progress...
