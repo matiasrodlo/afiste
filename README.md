@@ -1,31 +1,115 @@
-# afiste
-Jump Chile: Marketplace: Tokenized venture capital assets (2019)
+# Afiste - Tokenized Venture Capital Marketplace
 
-**Pitch:** https://youtu.be/_oshvfDnEXo
+## Overview
+Afiste is a Fintech platform that revolutionizes the Venture Capital industry by tokenizing investment portfolios and creating a digital marketplace for VC assets. The platform aims to increase liquidity in the VC market while making it more accessible to a broader range of investors.
 
-**Description:**
-<br>
+## Problem Statement
+Venture Capital, while being a major driver of technological innovation, faces several challenges:
+- Low liquidity (10-12 year lock-in periods)
+- High barriers to entry ($500,000 minimum investment)
+- Significant risk factors
+- Limited accessibility for smaller investors
 
-Venture Capital is one of the major contributors to the development of technological innovation. It has invested in 43% of the companies currently listed on the stock exchanges in the United States. Furthermore, it is an attractive investment category, as it generates returns well above the average.
+## Solution
+Afiste provides a digital platform that:
+- Enables VC funds to tokenize their investment portfolios
+- Creates a marketplace for trading tokenized VC assets
+- Increases market liquidity
+- Reduces entry barriers for investors
+- Complies with asset issuance and market regulations
 
-That being said, there are several constraints within the industry. The major obstacles include low liquidity, as it takes a considerable amount of time to generate profits (an average venture capital fund locks in investments for a period of 10-12 years). In addition, there are high barriers to entry (the minimum entry amount starts at $500,000), and there are high risks associated with this type of investment. These obstacles discourage a significant number of potential investors, both professional investors and financial institutions.
+## Project Context
+This project was developed during the second semester of Business Administration while participating in Jump Chile, a business idea acceleration program organized by the Catholic University of Chile through the UC Innovation Center. The project was selected among the top 20 out of more than 800 Latin American projects.
 
-The new era of digital assets offers unique opportunities to provide profitable liquidity solutions. In this context, Afiste is a Fintech that offers a digital platform aiming to comply with both asset issuance and market regulations. The goal is to foster an ecosystem where venture capital funds can increase their capital, tokenize their investment portfolios, and sell them as digital assets. By doing so, a new tool will be created to increase liquidity in the Venture Capital market and investment volume.
+## Project Structure
+```
+afiste/
+├── exchange/                # Cryptocurrency exchange platform
+│   ├── backend/            # Exchange backend services
+│   ├── frontend/           # Exchange frontend application
+│   └── peatio/            # Peatio cryptocurrency exchange integration
+├── web/                    # WordPress web platform
+│   ├── wp-admin/          # WordPress admin interface
+│   ├── wp-content/        # WordPress themes and plugins
+│   └── wp-includes/       # WordPress core files
+├── docs/                   # Project documentation
+├── .gitignore             # Git ignore rules
+└── README.md              # Project documentation
+```
 
+### Key Components
+- **Exchange Platform**: Complete cryptocurrency exchange system with trading functionality
+- **Web Platform**: WordPress-based website for user interface and content management
+- **Documentation**: Project documentation and guides
 
-**Context:**
-<br>
+## Technology Stack
+- **Frontend**: React.js with modern UI components
+- **Backend**: Node.js server
+- **Exchange**: Peatio cryptocurrency exchange integration
+- **Deployment**: Google Cloud Platform (app.yaml configurations)
+- **CI/CD**: Bitbucket Pipelines
 
-This project was developed during my second semester of Business Administration while simultaneously participating in Jump Chile, a business idea acceleration program focused on higher education students in Chile and Latin America. The program is organized by the Catholic University of Chile through the UC Innovation Center.
+## Development Setup
 
-We were selected among the top 20 out of more than 800 Latin American projects.
+### Prerequisites
+- Node.js (v14 or higher)
+- npm or yarn
+- Git
+- WordPress (for local development)
 
-**Trading Exchange UI:**
-  <a href="https://youtu.be/fx_i9NkrB8g">
-    <img src="https://github-production-user-asset-6210df.s3.amazonaws.com/52969662/282203775-735cbafd-0789-427c-8d73-7a7a8d4f6def.png" alt="Trading Exchange UI">
-  </a>
+### Getting Started
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/afiste.git
+   cd afiste
+   ```
 
-**Venture Capital Marketplace Flow:** https://youtu.be/fx_i9NkrB8g
-  <a href="https://youtu.be/fx_i9NkrB8g">
-    <img src="https://github-production-user-asset-6210df.s3.amazonaws.com/52969662/280883110-b43b429f-7c4e-4836-9ce3-a0e36ca90ceb.png" alt="Flujo Marketplace VCs">
-  </a>
+2. Set up the backend:
+   ```bash
+   cd Backend
+   npm install
+   npm start
+   ```
+
+3. Set up the frontend:
+   ```bash
+   cd Fronted
+   npm install
+   npm start
+   ```
+
+4. Configure WordPress (if needed):
+   ```bash
+   cd wordpress
+   # Follow WordPress installation instructions
+   ```
+
+### Environment Configuration
+1. Create `.env` files in both Backend and Frontend directories
+2. Configure the following environment variables:
+   - Database credentials
+   - API keys
+   - Service endpoints
+   - Other configuration variables
+
+### Version Control
+The project uses Git for version control. A comprehensive `.gitignore` file is included to exclude:
+- Dependencies (`node_modules/`)
+- Environment files (`.env*`)
+- Build outputs (`/build`, `/dist`)
+- IDE configurations (`.vscode/`, `.idea/`)
+- WordPress specific files
+- System and temporary files
+
+## Demo Videos
+- **Pitch Video**: [Watch on YouTube](https://youtu.be/_oshvfDnEXo)
+- **Trading Exchange UI Demo**: [Watch on YouTube](https://youtu.be/fx_i9NkrB8g)
+- **Venture Capital Marketplace Flow**: [Watch on YouTube](https://youtu.be/fx_i9NkrB8g)
+
+## UI Screenshots
+### Trading Exchange Interface
+[![Trading Exchange UI](https://github-production-user-asset-6210df.s3.amazonaws.com/52969662/282203775-735cbafd-0789-427c-8d73-7a7a8d4f6def.png)](https://youtu.be/fx_i9NkrB8g)
+
+### Venture Capital Marketplace Flow
+[![Marketplace Flow](https://github-production-user-asset-6210df.s3.amazonaws.com/52969662/280883110-b43b429f-7c4e-4836-9ce3-a0e36ca90ceb.png)](https://youtu.be/fx_i9NkrB8g)
+
