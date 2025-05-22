@@ -1,0 +1,188 @@
+roles:
+  - superadmin
+  - admin
+  - technical
+  - accountant
+  - compliance
+  - support
+  - member
+  - broker
+  - trader
+  - maker
+  - sa_maker
+
+admin_permissions:
+  superadmin:
+    manage:
+      - Operations::Account
+      - Operations::Asset
+      - Operations::Expense
+      - Operations::Liability
+      - Operations::Revenue
+      - Member
+      - Account
+      - Beneficiary
+      - PaymentAddress
+      - Deposit
+      - Withdraw
+      - WithdrawLimit
+      - Blockchain
+      - Currency
+      - Engine
+      - Market
+      - TradingFee
+      - Wallet
+      - Adjustment
+      - InternalTransfer
+      - WhitelistedSmartContract
+    read:
+      - Trade
+      - Order
+    create:
+      - Deposits::Fiat
+    update:
+      - Order
+  admin:
+    manage:
+      - Operations::Account
+      - Operations::Asset
+      - Operations::Expense
+      - Operations::Liability
+      - Operations::Revenue
+      - Member
+      - Account
+      - Beneficiary
+      - PaymentAddress
+      - Deposit
+      - Withdraw
+      - WithdrawLimit
+      - Blockchain
+      - Currency
+      - Engine
+      - Market
+      - TradingFee
+      - Wallet
+      - Adjustment 
+      - InternalTransfer
+      - WhitelistedSmartContract
+    read:
+      - Trade
+      - Order
+    create:
+      - Deposits::Fiat
+    update:
+      - Order
+  technical:
+    read:
+      - Operations::Account
+      - Operations::Asset
+      - Operations::Expense
+      - Operations::Liability
+      - Trade
+      - Order
+      - Member
+      - InternalTransfer
+    manage:
+      - WithdrawLimit
+      - Blockchain
+      - Currency
+      - Engine
+      - Market
+      - TradingFee
+      - Wallet
+    update:
+      - Order
+  accountant:
+    read:
+      - Operations::Account
+      - Operations::Asset
+      - Operations::Expense
+      - Operations::Liability
+      - Operations::Revenue
+      - Member
+      - Account
+      - Beneficiary
+      - PaymentAddress
+      - Deposit
+      - Withdraw
+      - WithdrawLimit
+      - Blockchain
+      - Currency
+      - Engine
+      - Market
+      - TradingFee
+      - Wallet
+      - Trade
+      - Order
+      - Adjustment
+      - InternalTransfer
+    create:
+      - Deposits::Fiat
+      - Adjustment
+  compliance:
+    read:
+      - Operations::Account
+      - Operations::Asset
+      - Operations::Expense
+      - Operations::Liability
+      - Member
+      - Account
+      - Beneficiary
+      - PaymentAddress
+      - Deposit
+      - Withdraw
+      - Currency
+      - Engine
+      - Market
+      - Trade
+      - Order
+  support:
+    read:
+      - Operations::Account
+      - Operations::Asset
+      - Operations::Expense
+      - Operations::Liability
+      - Member
+      - Account
+      - Beneficiary
+      - PaymentAddress
+      - Deposit
+      - Withdraw
+      - Currency
+      - Engine
+      - Market
+      - Trade
+      - Order
+      - InternalTransfer
+
+user_permissions:
+  superadmin:
+    manage: all
+  admin:
+    manage: all
+  technical:
+    manage: all
+  accountant:
+    manage: all
+  compliance:
+    manage: all
+  support:
+    manage: all
+  member:
+    manage: all
+  broker:
+    manage: all
+  trader:
+    manage: all
+  maker:
+    manage: all
+  sa_maker:
+    read:
+      - Operations::Account
+      - Order
+      - Trade
+      - StatsMemberPnl
+    create:
+      - Order
+    update:
+      - Order

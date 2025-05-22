@@ -1,0 +1,111 @@
+connect:
+  host: <%= ENV.fetch('RABBITMQ_HOST', 'localhost') %>
+  port: <%= ENV.fetch('RABBITMQ_PORT', '5672') %>
+  username: <%= ENV.fetch('RABBITMQ_USER', 'guest') %>
+  password: <%= ENV.fetch('RABBITMQ_PASSWORD', 'guest') %>
+
+exchange:
+  trade:
+    name: peatio.trade
+    type: headers
+  notification:
+    name: peatio.notification
+    type: direct
+  orderbook:
+    name: peatio.orderbook
+    type: fanout
+  events:
+    name: peatio.events
+    type: direct
+  matching:
+    name: peatio.matching
+    type: direct
+  finex-spot:
+    name: finex.orderapi
+    type: direct
+  opendax:
+    name: finex.orderapi
+    type: direct
+
+queue:
+  matching:
+    name: peatio.matching
+    durable: true
+    # You can set queue maximum length (see https://www.rabbitmq.com/maxlength.html).
+    # For order matching queue it is recommended to set limit about to 10000 per market.
+    # So in case you have 10 markets you would set 1000000. But this value is relative and depends on your business (market load).
+    #
+    # max_length: 10000
+    #
+    # Alternatively you can pass custom arguments here (for example in case your use RabbitMQ plugins):
+    #
+    # arguments:
+    #   x-max-length: 10000
+    #
+    # When you change any parameter of queue definition it is required to drop it in RabbitMQ admin panel.
+    # In case you want this to be done transparently and automatically I recommend to set auto_delete to true.
+    #
+    # auto_delete: true
+    #
+    # In such case queue will be deleted automatically once all workers are disconnected. This should ensure queue
+    # is created from scratch with new configuration at next redeployment.
+  new_trade:
+    name: peatio.trade.new
+    durable: true
+  order_processor:
+    name: peatio.order.processor
+    durable: true
+  market_ticker:
+    name: peatio.trade.market_ticker
+  pusher_market:
+    name: peatio.pusher.market
+  pusher_member:
+    name: peatio.pusher.member
+  withdraw_coin:
+    name: peatio.withdraw.coin
+  deposit_collection_fees:
+    name: peatio.deposit.collection_fees
+  deposit_collection:
+    name: peatio.deposit.collection
+  deposit_coin_address:
+    name: peatio.deposit.coin.address
+    durable: true
+  influx_writer:
+    name: peatio.trade.writer
+  trade_error:
+    name: peatio.trades.errors
+  # Queue which used by third-party trading engine for updating balances and
+  # order submit consuming.
+  events_processor:
+    name: peatio.events.processor
+
+binding:
+  matching:
+    queue: matching
+    clean_start: true
+    exchange: matching
+  trade_executor:
+    queue: new_trade
+    exchange: matching
+  order_processor:
+    queue: order_processor
+    exchange: matching
+  withdraw_coin:
+    queue: withdraw_coin
+  deposit_coin_address:
+    queue: deposit_coin_address
+  influx_writer:
+    queue: influx_writer
+    exchange: trade
+  trade_error:
+    queue: trade_error
+    exchange: matching
+  events_processor:
+    queue: events_processor
+    exchange: events
+
+channel:
+  trade_executor:
+    prefetch: 5
+  order_processor:
+    prefetch: 5

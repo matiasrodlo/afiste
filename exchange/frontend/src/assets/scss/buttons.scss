@@ -1,0 +1,20 @@
+.vIcon {
+  & > svg  {
+    width: 34px;
+    transition: all ease-in-out 0.3s;
+    border: 1px solid #37404f;
+    padding: 7px;
+    color: #848f9e;
+    margin-bottom: 5px;
+    background-color: #25252759;
+    background-image: linear-gradient(45deg, #23273463, #25252759);
+  }
+
+  & > svg:hover {
+    background-image: linear-gradient(45deg, #181c27, #181c27);
+    background-color: #3a37379c;
+    color: white;
+    transition: all ease-in-out 0.3s;
+    border: 1px solid transparent;
+  }
+}
