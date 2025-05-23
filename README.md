@@ -3,6 +3,11 @@
 ## Overview
 Afiste is a Fintech platform that revolutionizes the Venture Capital industry by tokenizing investment portfolios and creating a digital marketplace for VC assets. The platform aims to increase liquidity in the VC market while making it more accessible to a broader range of investors.
 
+This project was developed during the second semester of Business Administration while participating in Jump Chile, a business idea acceleration program organized by the Catholic University of Chile through the UC Innovation Center. The project was selected among the top 20 out of more than 800 Latin American projects.
+
+- **Pitch Video**: [Watch on YouTube](https://youtu.be/_oshvfDnEXo)
+- **Venture Capital Marketplace Flow**: [Watch on YouTube](https://youtu.be/fx_i9NkrB8g)
+
 ## Problem Statement
 Venture Capital, while being a major driver of technological innovation, faces several challenges:
 - Low liquidity (10-12 year lock-in periods)
@@ -17,9 +22,6 @@ Afiste provides a digital platform that:
 - Increases market liquidity
 - Reduces entry barriers for investors
 - Complies with asset issuance and market regulations
-
-## Project Context
-This project was developed during the second semester of Business Administration while participating in Jump Chile, a business idea acceleration program organized by the Catholic University of Chile through the UC Innovation Center. The project was selected among the top 20 out of more than 800 Latin American projects.
 
 ## Project Structure
 ```
@@ -100,11 +102,6 @@ The project uses Git for version control. A comprehensive `.gitignore` file is i
 - IDE configurations (`.vscode/`, `.idea/`)
 - WordPress specific files
 - System and temporary files
-
-## Demo Videos
-- **Pitch Video**: [Watch on YouTube](https://youtu.be/_oshvfDnEXo)
-- **Trading Exchange UI Demo**: [Watch on YouTube](https://youtu.be/fx_i9NkrB8g)
-- **Venture Capital Marketplace Flow**: [Watch on YouTube](https://youtu.be/fx_i9NkrB8g)
 
 ## UI Screenshots
 ### Trading Exchange Interface
