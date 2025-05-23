@@ -3,7 +3,7 @@
 ## Overview
 Afiste is a Fintech platform for the Venture Capital industry that tokenizes investment portfolios and creates a digital marketplace for VC assets. The platform aims to increase liquidity in the VC market while making it more accessible to a broader range of investors.
 
-This project was developed during the second semester of Commercial Engineering while participating in Jump Chile, a business idea acceleration program organized by the Catholic University of Chile through the UC Innovation Center. The project was selected among the top 20 out of more than 800 Latin American projects.
+This project was developed during the second semester of Commercial Engineering while participating in [Jump Chile](https://jumpchile.com/), a business idea acceleration program organized by the Catholic University of Chile through the UC Innovation Center. The project was selected among the top 20 out of more than 800 Latin American projects.
 
 - **Pitch Video**: [Watch on YouTube](https://youtu.be/_oshvfDnEXo)
 - **Venture Capital Marketplace Flow**: [Watch on YouTube](https://youtu.be/fx_i9NkrB8g)
