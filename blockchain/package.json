@@ -1,0 +1,52 @@
+{
+  "name": "afiste-blockchain",
+  "version": "1.0.0",
+  "description": "Smart contracts for Afiste VC tokenization platform",
+  "main": "index.js",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "test:coverage": "hardhat coverage",
+    "deploy:local": "hardhat run scripts/deploy.ts --network localhost",
+    "deploy:mumbai": "hardhat run scripts/deploy-testnet.ts --network mumbai",
+    "deploy:polygon": "hardhat run scripts/deploy-mainnet.ts --network polygon",
+    "verify:mumbai": "hardhat run scripts/verify.ts --network mumbai",
+    "verify:polygon": "hardhat run scripts/verify.ts --network polygon",
+    "migrate:data": "hardhat run scripts/migrate-data.ts",
+    "verify": "hardhat verify",
+    "node": "hardhat node",
+    "clean": "hardhat clean"
+  },
+  "author": "Matías Rodlo",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/matiasrodlo/afiste.git"
+  },
+  "keywords": [
+    "blockchain",
+    "ethereum",
+    "smart-contracts",
+    "vc",
+    "tokenization"
+  ],
+  "author": "Matías Rodlo",
+  "license": "ISC",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "@nomicfoundation/hardhat-verify": "^2.0.0",
+    "@typechain/ethers-v6": "^0.5.0",
+    "@typechain/hardhat": "^9.0.0",
+    "@types/chai": "^4.3.11",
+    "@types/mocha": "^10.0.6",
+    "chai": "^4.4.1",
+    "hardhat": "^2.19.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.0.0",
+    "dotenv": "^16.6.1",
+    "ethers": "^6.9.0"
+  }
+}

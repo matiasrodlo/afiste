@@ -1,0 +1,2 @@
+export { VCPerformanceChart } from './VCPerformanceChart';
+

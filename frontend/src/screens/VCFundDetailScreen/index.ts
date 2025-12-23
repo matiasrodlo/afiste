@@ -1,0 +1,2 @@
+export { VCFundDetailScreen } from './VCFundDetailScreen';
+

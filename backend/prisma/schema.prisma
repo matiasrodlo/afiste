@@ -1,0 +1,848 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                    String   @id @default(uuid())
+  email                 String   @unique
+  passwordDigest        String   @map("password_digest")
+  firstName             String?  @map("first_name")
+  lastName              String?  @map("last_name")
+  phone                 String?
+  birthDate             DateTime? @map("birth_date") @db.Date
+  country               String?
+  city                  String?
+  address               String?
+  postalCode            String?  @map("postal_code")
+  
+  // KYC fields
+  kycLevel              Int      @default(0) @map("kyc_level")
+  kycStatus             String   @default("pending") @map("kyc_status") // pending, verified, rejected
+  kycNotes              String?  @map("kyc_notes") @db.Text
+  kycVerifiedAt         DateTime? @map("kyc_verified_at")
+  
+  // Role and permissions
+  role                  String   @default("investor") // investor, admin, fund_manager
+  isActive              Boolean  @default(true) @map("is_active")
+  isEmailVerified       Boolean  @default(false) @map("is_email_verified")
+  emailVerifiedAt       DateTime? @map("email_verified_at")
+  
+  // Security
+  resetPasswordToken    String?  @map("reset_password_token")
+  resetPasswordSentAt   DateTime? @map("reset_password_sent_at")
+  lastLoginAt           DateTime? @map("last_login_at")
+  lastLoginIp           String?  @map("last_login_ip")
+  failedLoginAttempts   Int      @default(0) @map("failed_login_attempts")
+  lockedUntil           DateTime? @map("locked_until")
+  
+  // 2FA/MFA
+  twoFactorEnabled      Boolean  @default(false) @map("two_factor_enabled")
+  twoFactorSecret       String?  @map("two_factor_secret") // Encrypted TOTP secret
+  twoFactorBackupCodes  String[] @map("two_factor_backup_codes") // Encrypted backup codes
+  twoFactorVerifiedAt   DateTime? @map("two_factor_verified_at")
+  
+  // Relations
+  accounts              Account[]
+  orders                Order[]
+  tokenAllocations      TokenAllocation[]
+  kycDocuments          KYCDocument[]
+  amlTransactions       AMLTransaction[]
+  dividendPayments      DividendPayment[]
+  governanceVotes       GovernanceVote[]
+  stakes                Stake[]
+  payments              Payment[]
+  bankAccounts          BankAccount[]
+  withdrawals           Withdrawal[]
+  sessions              Session[]
+  
+  createdAt             DateTime @default(now()) @map("created_at")
+  updatedAt             DateTime @updatedAt @map("updated_at")
+  
+  @@index([email])
+  @@index([kycLevel])
+  @@index([kycStatus])
+  @@index([role])
+  @@index([isActive])
+  @@index([resetPasswordToken])
+  @@map("users")
+}
+
+model Account {
+  id          String   @id @default(uuid())
+  userId      String   @map("user_id")
+  currencyId  String   @map("currency_id")
+  balance     Decimal  @default(0) @db.Decimal(32, 16)
+  locked      Decimal  @default(0) @db.Decimal(32, 16)
+  
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  currency    Currency @relation(fields: [currencyId], references: [id])
+  
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  
+  @@unique([userId, currencyId])
+  @@index([userId])
+  @@index([currencyId])
+  @@index([balance])
+  @@map("accounts")
+}
+
+model Currency {
+  id                      String   @id
+  code                    String   @unique
+  name                    String
+  symbol                  String
+  precision               Int      @default(8)
+  type                    String   @default("coin")
+  visible                 Boolean  @default(true)
+  depositFee              Int      @default(0) @map("deposit_fee")
+  withdrawFee             Int      @default(0) @map("withdraw_fee")
+  minDepositAmount        Decimal  @default(0) @map("min_deposit_amount") @db.Decimal(20, 8)
+  minWithdrawAmount       Decimal  @default(0) @map("min_withdraw_amount") @db.Decimal(20, 8)
+  options                 Json?    @default("{}")
+  
+  // VC Fund fields
+  vcFundId                String?  @unique @map("vc_fund_id")
+  vcFundName              String?  @map("vc_fund_name")
+  vcFundDescription       String?  @map("vc_fund_description") @db.Text
+  vcFundManager            String?  @map("vc_fund_manager")
+  vcFundSize               Decimal? @map("vc_fund_size") @db.Decimal(20, 8)
+  vcFundLaunchDate         DateTime? @map("vc_fund_launch_date") @db.Date
+  vcFundMaturityDate       DateTime? @map("vc_fund_maturity_date") @db.Date
+  vcFundMinimumInvestment  Decimal? @map("vc_fund_minimum_investment") @db.Decimal(20, 8)
+  vcFundTotalSupply        Decimal? @map("vc_fund_total_supply") @db.Decimal(20, 8)
+  vcFundAvailableSupply    Decimal? @map("vc_fund_available_supply") @db.Decimal(20, 8)
+  vcFundPortfolioCompanies Json?    @default("[]") @map("vc_fund_portfolio_companies")
+  vcFundPerformanceData    Json?    @default("{}") @map("vc_fund_performance_data")
+  vcFundTerms               String?  @map("vc_fund_terms") @db.Text
+  vcFundRiskLevel           String?  @map("vc_fund_risk_level")
+  vcFundStatus              String?  @map("vc_fund_status")
+  vcFundRegulatoryStatus    String?  @map("vc_fund_regulatory_status")
+  vcFundDocuments           Json?    @default("{}") @map("vc_fund_documents")
+  
+  // Relations
+  accounts                 Account[]
+  vcFund                   VCFund?  @relation(fields: [vcFundId], references: [id])
+  baseMarkets              Market[] @relation("BaseCurrency")
+  quoteMarkets             Market[] @relation("QuoteCurrency")
+  
+  createdAt                DateTime @default(now()) @map("created_at")
+  updatedAt                DateTime @updatedAt @map("updated_at")
+  
+  @@index([vcFundId])
+  @@index([vcFundStatus])
+  @@map("currencies")
+}
+
+model VCFund {
+  id                String   @id
+  name              String
+  description       String?  @db.Text
+  manager           String
+  totalSupply       Decimal  @map("total_supply") @db.Decimal(20, 8)
+  availableSupply   Decimal  @default(0) @map("available_supply") @db.Decimal(20, 8)
+  fundSize          Decimal? @map("fund_size") @db.Decimal(20, 8)
+  minimumInvestment Decimal  @map("minimum_investment") @db.Decimal(20, 8)
+  launchDate        DateTime? @map("launch_date") @db.Date
+  maturityDate      DateTime? @map("maturity_date") @db.Date
+  status            String   @default("active") // active, closed, liquidated
+  riskLevel        String?  @map("risk_level") // low, medium, high
+  regulatoryStatus  String   @default("pending") @map("regulatory_status") // approved, pending, rejected
+  terms             String?  @db.Text
+  documents         Json?    @default("{}")
+  currentNav        Decimal  @default(1.0) @map("current_nav") @db.Decimal(20, 8)
+  
+  // Relations
+  currency          Currency?
+  portfolioCompanies VCFundPortfolioCompany[]
+  performanceRecords VCFundPerformanceRecord[]
+  tokenOffering     TokenOffering?
+  fundFees          FundFee[]
+  dividendDistributions DividendDistribution[]
+  governanceProposals GovernanceProposal[]
+  stakingPool       StakingPool?
+  
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+  
+  @@index([status])
+  @@index([regulatoryStatus])
+  @@index([riskLevel])
+  @@map("vc_funds")
+}
+
+model VCFundPortfolioCompany {
+  id                String   @id @default(uuid())
+  vcFundId          String   @map("vc_fund_id")
+  name              String
+  sector            String?
+  stage             String?
+  investmentAmount  Decimal? @map("investment_amount") @db.Decimal(20, 8)
+  investmentDate    DateTime? @map("investment_date") @db.Date
+  currentValuation  Decimal? @map("current_valuation") @db.Decimal(20, 8)
+  ownershipPercentage Decimal? @map("ownership_percentage") @db.Decimal(10, 4)
+  description       String?  @db.Text
+  
+  vcFund            VCFund   @relation(fields: [vcFundId], references: [id], onDelete: Cascade)
+  
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+  
+  @@index([vcFundId])
+  @@index([sector])
+  @@index([stage])
+  @@map("vc_fund_portfolio_companies")
+}
+
+model VCFundPerformanceRecord {
+  id                String   @id @default(uuid())
+  vcFundId          String   @map("vc_fund_id")
+  recordDate        DateTime @map("record_date") @db.Date
+  navPerToken       Decimal  @map("nav_per_token") @db.Decimal(20, 8)
+  totalAssets       Decimal? @map("total_assets") @db.Decimal(20, 8)
+  totalLiabilities  Decimal? @map("total_liabilities") @db.Decimal(20, 8)
+  performanceMetrics Json?  @default("{}") @map("performance_metrics")
+  
+  vcFund            VCFund   @relation(fields: [vcFundId], references: [id], onDelete: Cascade)
+  
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+  
+  @@unique([vcFundId, recordDate])
+  @@index([vcFundId])
+  @@index([vcFundId, recordDate(sort: Desc)])
+  @@index([recordDate])
+  @@map("vc_fund_performance_records")
+}
+
+model Market {
+  id                String   @id
+  baseUnit          String   @map("base_unit")
+  quoteUnit        String   @map("quote_unit")
+  amountPrecision   Int      @default(4) @map("amount_precision")
+  pricePrecision    Int      @default(4) @map("price_precision")
+  minPrice          Decimal  @default(0.0001) @map("min_price") @db.Decimal(20, 8)
+  maxPrice          Decimal  @default(1000.0) @map("max_price") @db.Decimal(20, 8)
+  minAmount         Decimal  @default(0.0001) @map("min_amount") @db.Decimal(20, 8)
+  position          Int      @default(0)
+  state             String   @default("active") // active, disabled
+  type              String   @default("spot")
+  
+  // VC Fund fields
+  vcFundId          String?  @map("vc_fund_id")
+  initialOfferingPrice Decimal? @map("initial_offering_price") @db.Decimal(20, 8)
+  currentNav        Decimal? @map("current_nav") @db.Decimal(20, 8)
+  
+  // Relations
+  baseCurrency      Currency @relation("BaseCurrency", fields: [baseUnit], references: [id])
+  quoteCurrency     Currency @relation("QuoteCurrency", fields: [quoteUnit], references: [id])
+  orders            Order[]
+  trades            Trade[]
+  
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+  
+  @@unique([baseUnit, quoteUnit])
+  @@index([state])
+  @@index([vcFundId])
+  @@map("markets")
+}
+
+model Order {
+  id                String   @id @default(uuid())
+  userId            String   @map("user_id")
+  marketId          String   @map("market_id")
+  side              String   // buy, sell
+  ordType           String   @default("limit") @map("ord_type") // limit, market
+  price             Decimal? @db.Decimal(20, 8)
+  volume            Decimal  @db.Decimal(20, 8)
+  originVolume      Decimal  @map("origin_volume") @db.Decimal(20, 8)
+  filledVolume      Decimal  @default(0) @map("filled_volume") @db.Decimal(20, 8)
+  state             String   @default("wait") // wait, done, cancel
+  locked            Decimal  @default(0) @db.Decimal(20, 8)
+  originLocked      Decimal  @default(0) @map("origin_locked") @db.Decimal(20, 8)
+  
+  // Relations
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  market            Market   @relation(fields: [marketId], references: [id])
+  trades            Trade[]  @relation("AskOrder")
+  trades2           Trade[]  @relation("BidOrder")
+  
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+  
+  @@index([userId, state])
+  @@index([marketId, state])
+  @@index([marketId, side, state])
+  @@index([userId, createdAt(sort: Desc)])
+  @@index([marketId, createdAt(sort: Desc)])
+  @@index([createdAt])
+  @@map("orders")
+}
+
+model Trade {
+  id                String   @id @default(uuid())
+  marketId          String   @map("market_id")
+  askOrderId        String   @map("ask_order_id")
+  bidOrderId        String   @map("bid_order_id")
+  askUserId         String   @map("ask_user_id")
+  bidUserId         String   @map("bid_user_id")
+  price             Decimal  @db.Decimal(20, 8)
+  volume            Decimal  @db.Decimal(20, 8)
+  funds             Decimal  @db.Decimal(20, 8) // price * volume
+  trend             Int?     // 1 for up, 0 for down
+  
+  // Relations
+  market            Market   @relation(fields: [marketId], references: [id])
+  askOrder          Order    @relation("AskOrder", fields: [askOrderId], references: [id])
+  bidOrder          Order    @relation("BidOrder", fields: [bidOrderId], references: [id])
+  
+  createdAt         DateTime @default(now()) @map("created_at")
+  
+  @@index([marketId, createdAt(sort: Desc)])
+  @@index([askUserId, createdAt(sort: Desc)])
+  @@index([bidUserId, createdAt(sort: Desc)])
+  @@map("trades")
+}
+
+// ============================================
+// MVP CRITICAL FEATURES - Token Offering System
+// ============================================
+
+model TokenOffering {
+  id                String   @id @default(uuid())
+  vcFundId          String   @unique @map("vc_fund_id")
+  offeringType      String   @default("initial") @map("offering_type") // "initial", "secondary", "private"
+  startDate         DateTime @map("start_date")
+  endDate           DateTime? @map("end_date")
+  offeringPrice     Decimal  @map("offering_price") @db.Decimal(20, 8)
+  minInvestment     Decimal  @map("min_investment") @db.Decimal(20, 8)
+  maxInvestment     Decimal? @map("max_investment") @db.Decimal(20, 8)
+  totalTokensOffered Decimal @map("total_tokens_offered") @db.Decimal(20, 8)
+  tokensSold        Decimal  @default(0) @map("tokens_sold") @db.Decimal(20, 8)
+  status            String   @default("upcoming") // "upcoming", "active", "paused", "completed", "cancelled"
+  whitelistRequired Boolean  @default(false) @map("whitelist_required")
+  description       String?  @db.Text
+  
+  vcFund            VCFund   @relation(fields: [vcFundId], references: [id], onDelete: Cascade)
+  allocations       TokenAllocation[]
+  
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+  
+  @@index([status])
+  @@index([status, startDate])
+  @@index([startDate])
+  @@map("token_offerings")
+}
+
+model TokenAllocation {
+  id                String   @id @default(uuid())
+  offeringId        String   @map("offering_id")
+  userId            String   @map("user_id")
+  allocatedTokens   Decimal  @map("allocated_tokens") @db.Decimal(20, 8)
+  purchasedTokens   Decimal  @default(0) @map("purchased_tokens") @db.Decimal(20, 8)
+  vestingSchedule   Json?    @map("vesting_schedule") // { "cliff": "6M", "duration": "24M", "schedule": [...] }
+  lockUntil         DateTime? @map("lock_until")
+  
+  offering          TokenOffering @relation(fields: [offeringId], references: [id], onDelete: Cascade)
+  user              User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+  
+  @@unique([offeringId, userId])
+  @@index([userId])
+  @@index([offeringId])
+  @@map("token_allocations")
+}
+
+// ============================================
+// MVP CRITICAL FEATURES - Enhanced KYC/AML
+// ============================================
+
+model KYCDocument {
+  id                String   @id @default(uuid())
+  userId            String   @map("user_id")
+  documentType      String   @map("document_type") // "passport", "id_card", "proof_of_address", "accreditation"
+  documentUrl       String   @map("document_url")
+  status            String   @default("pending") // "pending", "verified", "rejected"
+  verifiedBy        String?  @map("verified_by")
+  verifiedAt        DateTime? @map("verified_at")
+  rejectionReason   String?  @map("rejection_reason") @db.Text
+  
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+  
+  @@index([userId])
+  @@index([userId, status])
+  @@index([status])
+  @@index([documentType])
+  @@map("kyc_documents")
+}
+
+model AMLTransaction {
+  id                String   @id @default(uuid())
+  userId            String   @map("user_id")
+  transactionType   String   @map("transaction_type") // "investment", "withdrawal", "transfer"
+  amount            Decimal  @db.Decimal(20, 8)
+  currency          String   @default("USDT")
+  riskScore         Int      @default(0) @map("risk_score") // 0-100
+  flagged           Boolean  @default(false)
+  reviewStatus      String   @default("pending") @map("review_status") // "pending", "reviewed", "cleared", "blocked"
+  reviewedBy        String?  @map("reviewed_by")
+  reviewedAt        DateTime? @map("reviewed_at")
+  notes             String?  @db.Text
+  
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+  
+  @@index([userId])
+  @@index([userId, createdAt(sort: Desc)])
+  @@index([flagged])
+  @@index([reviewStatus])
+  @@index([createdAt])
+  @@map("aml_transactions")
+}
+
+// ============================================
+// MVP CRITICAL FEATURES - Fee Structure
+// ============================================
+
+model FundFee {
+  id                String   @id @default(uuid())
+  vcFundId          String   @map("vc_fund_id")
+  feeType           String   @map("fee_type") // "management", "performance", "transaction"
+  rate              Decimal  @db.Decimal(10, 4) // percentage or fixed amount
+  calculationMethod String   @map("calculation_method") // "percentage_of_nav", "percentage_of_profit", "fixed"
+  period            String   @default("quarterly") // "monthly", "quarterly", "annually", "on_exit"
+  status            String   @default("active") // "active", "inactive"
+  
+  vcFund            VCFund   @relation(fields: [vcFundId], references: [id], onDelete: Cascade)
+  charges           FeeCharge[]
+  
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+  
+  @@index([vcFundId])
+  @@index([status])
+  @@map("fund_fees")
+}
+
+model FeeCharge {
+  id                String   @id @default(uuid())
+  feeId             String   @map("fee_id")
+  periodStart       DateTime @map("period_start") @db.Date
+  periodEnd         DateTime @map("period_end") @db.Date
+  amount            Decimal  @db.Decimal(20, 8)
+  currency          String   @default("USDT")
+  status            String   @default("pending") // "pending", "charged", "paid", "waived"
+  chargedAt         DateTime? @map("charged_at")
+  notes             String?  @db.Text
+  
+  fee               FundFee  @relation(fields: [feeId], references: [id], onDelete: Cascade)
+  
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+  
+  @@index([feeId])
+  @@index([status, periodStart(sort: Desc)])
+  @@index([status])
+  @@index([periodStart])
+  @@map("fee_charges")
+}
+
+// ============================================
+// MVP IMPORTANT FEATURES - Dividend Distribution
+// ============================================
+
+model DividendDistribution {
+  id                String   @id @default(uuid())
+  vcFundId          String   @map("vc_fund_id")
+  distributionDate  DateTime @map("distribution_date") @db.Date
+  amountPerToken    Decimal  @map("amount_per_token") @db.Decimal(20, 8)
+  totalAmount       Decimal  @map("total_amount") @db.Decimal(20, 8)
+  currency          String   @default("USDT") // USDT, USDC
+  status            String   @default("pending") // "pending", "processing", "completed", "failed"
+  description       String?  @db.Text
+  
+  vcFund            VCFund   @relation(fields: [vcFundId], references: [id], onDelete: Cascade)
+  payments          DividendPayment[]
+  
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+  
+  @@index([vcFundId])
+  @@index([vcFundId, distributionDate(sort: Desc)])
+  @@index([distributionDate])
+  @@index([status])
+  @@map("dividend_distributions")
+}
+
+model DividendPayment {
+  id                String   @id @default(uuid())
+  distributionId    String   @map("distribution_id")
+  userId            String   @map("user_id")
+  tokensHeld        Decimal  @map("tokens_held") @db.Decimal(20, 8)
+  amount            Decimal  @db.Decimal(20, 8)
+  currency          String   @default("USDT")
+  status            String   @default("pending") // "pending", "paid", "failed"
+  paidAt             DateTime? @map("paid_at")
+  transactionHash   String?  @map("transaction_hash")
+  
+  distribution      DividendDistribution @relation(fields: [distributionId], references: [id], onDelete: Cascade)
+  user              User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+  
+  @@index([userId])
+  @@index([distributionId])
+  @@index([status])
+  @@map("dividend_payments")
+}
+
+// ============================================
+// V2 FEATURES - Governance (for future)
+// ============================================
+
+model GovernanceProposal {
+  id                String   @id @default(uuid())
+  vcFundId          String   @map("vc_fund_id")
+  title             String
+  description       String   @db.Text
+  proposalType      String   @map("proposal_type") // "nav_update", "fund_closure", "manager_change", etc.
+  startDate         DateTime @map("start_date")
+  endDate           DateTime @map("end_date")
+  status            String   @default("draft") // "draft", "active", "passed", "rejected", "expired"
+  quorum            Decimal  @default(50.0) @map("quorum") @db.Decimal(5, 2) // percentage
+  votesFor          Decimal  @default(0) @map("votes_for") @db.Decimal(20, 8)
+  votesAgainst      Decimal  @default(0) @map("votes_against") @db.Decimal(20, 8)
+  totalVotes        Decimal  @default(0) @map("total_votes") @db.Decimal(20, 8)
+  
+  vcFund            VCFund   @relation(fields: [vcFundId], references: [id], onDelete: Cascade)
+  votes              GovernanceVote[]
+  
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+  
+  @@index([vcFundId])
+  @@index([status])
+  @@map("governance_proposals")
+}
+
+model GovernanceVote {
+  id                String   @id @default(uuid())
+  proposalId           String   @map("proposal_id")
+  userId            String   @map("user_id")
+  vote              String   // "for", "against", "abstain"
+  votingPower       Decimal  @map("voting_power") @db.Decimal(20, 8) // tokens held at voting time
+  
+  proposal          GovernanceProposal @relation(fields: [proposalId], references: [id], onDelete: Cascade)
+  user              User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  createdAt         DateTime @default(now()) @map("created_at")
+  
+  @@unique([proposalId, userId])
+  @@index([userId])
+  @@index([proposalId])
+  @@map("governance_votes")
+}
+
+// ============================================
+// V2 FEATURES - Staking (for future)
+// ============================================
+
+model StakingPool {
+  id                String   @id @default(uuid())
+  vcFundId          String   @unique @map("vc_fund_id")
+  apy               Decimal  @db.Decimal(10, 4) // Annual Percentage Yield
+  minStakeAmount    Decimal  @map("min_stake_amount") @db.Decimal(20, 8)
+  lockPeriod        Int      @map("lock_period") // days
+  status            String   @default("active") // "active", "paused", "closed"
+  
+  vcFund            VCFund   @relation(fields: [vcFundId], references: [id], onDelete: Cascade)
+  stakes            Stake[]
+  
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+  
+  @@map("staking_pools")
+}
+
+model Stake {
+  id                String   @id @default(uuid())
+  poolId            String   @map("pool_id")
+  userId            String   @map("user_id")
+  amount            Decimal  @db.Decimal(20, 8)
+  lockUntil         DateTime @map("lock_until")
+  rewardsEarned     Decimal  @default(0) @map("rewards_earned") @db.Decimal(20, 8)
+  status            String   @default("active") // "active", "unlocked", "withdrawn
+  
+  pool              StakingPool @relation(fields: [poolId], references: [id], onDelete: Cascade)
+  user              User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+  
+  @@index([userId])
+  @@index([poolId])
+  @@index([status])
+  @@map("stakes")
+}
+
+// ============================================
+// BLOCKCHAIN INTEGRATION - Transaction Tracking
+// ============================================
+
+model BlockchainTransaction {
+  id                String   @id @default(uuid())
+  txHash            String   @unique @map("tx_hash")
+  contractAddress   String   @map("contract_address")
+  functionName      String   @map("function_name")
+  fromAddress       String   @map("from_address")
+  toAddress         String?  @map("to_address")
+  value             Decimal  @default(0) @db.Decimal(20, 8)
+  gasLimit          Decimal? @map("gas_limit") @db.Decimal(20, 8)
+  gasPrice          Decimal? @map("gas_price") @db.Decimal(20, 8)
+  gasUsed           Decimal? @map("gas_used") @db.Decimal(20, 8)
+  status            String   @default("pending") // pending, sent, confirmed, failed
+  blockNumber       Int?     @map("block_number")
+  blockHash         String?  @map("block_hash")
+  confirmations     Int      @default(0)
+  error             String?  @db.Text
+  metadata          Json?    @default("{}")
+  
+  events            BlockchainEvent[]
+  
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+  confirmedAt       DateTime? @map("confirmed_at")
+  
+  @@index([txHash])
+  @@index([contractAddress])
+  @@index([status])
+  @@index([blockNumber])
+  @@index([fromAddress])
+  @@index([createdAt])
+  @@map("blockchain_transactions")
+}
+
+model BlockchainEvent {
+  id                String   @id @default(uuid())
+  txHash            String   @map("tx_hash")
+  contractAddress   String   @map("contract_address")
+  eventName         String   @map("event_name")
+  blockNumber       Int      @map("block_number")
+  blockHash         String   @map("block_hash")
+  logIndex          Int      @map("log_index")
+  eventData         Json     @map("event_data")
+  processed         Boolean  @default(false)
+  processedAt       DateTime? @map("processed_at")
+  
+  transaction       BlockchainTransaction @relation(fields: [txHash], references: [txHash], onDelete: Cascade)
+  
+  createdAt         DateTime @default(now()) @map("created_at")
+  
+  @@unique([txHash, logIndex])
+  @@index([txHash])
+  @@index([contractAddress])
+  @@index([eventName])
+  @@index([blockNumber])
+  @@index([processed])
+  @@map("blockchain_events")
+}
+
+model BlockchainSyncState {
+  id                String   @id @default(uuid())
+  contractAddress   String   @unique @map("contract_address")
+  contractType      String   @map("contract_type") // "VCToken", "TokenOffering"
+  lastProcessedBlock Int     @default(0) @map("last_processed_block")
+  lastProcessedAt   DateTime @default(now()) @map("last_processed_at")
+  isActive          Boolean  @default(true) @map("is_active")
+  errorCount        Int      @default(0) @map("error_count")
+  lastError         String?  @map("last_error") @db.Text
+  
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+  
+  @@index([contractAddress])
+  @@index([contractType])
+  @@index([isActive])
+  @@map("blockchain_sync_states")
+}
+
+// ============================================
+// WALLET MANAGEMENT
+// ============================================
+
+model Wallet {
+  id                String   @id @default(uuid())
+  address           String   @unique
+  type              String   // "hot", "cold", "user"
+  status            String   @default("active") // "active", "frozen", "closed"
+  userId            String?  @map("user_id")
+  isMultiSig        Boolean  @default(false) @map("is_multi_sig")
+  threshold         Int?     // Multi-sig threshold (e.g., 2-of-3)
+  owners            String[] // Multi-sig owner addresses
+  encryptedKey      String?  @map("encrypted_key") @db.Text // Encrypted private key (for non-multi-sig)
+  metadata          Json?    @default("{}")
+  
+  transactions      WalletTransaction[]
+  
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+  
+  @@index([address])
+  @@index([type])
+  @@index([status])
+  @@index([userId])
+  @@map("wallets")
+}
+
+model WalletTransaction {
+  id                String   @id @default(uuid())
+  walletId          String   @map("wallet_id")
+  txHash            String?  @unique @map("tx_hash")
+  toAddress         String   @map("to_address")
+  amount            Decimal  @db.Decimal(20, 8)
+  currency          String   @default("ETH")
+  type              String   // "deposit", "withdrawal", "transfer", "fee"
+  status            String   @default("pending") // "pending", "signed", "broadcast", "confirmed", "failed"
+  requiresApproval  Boolean  @default(false) @map("requires_approval")
+  approvals        String[] // Array of approver addresses
+  metadata          Json?    @default("{}")
+  
+  wallet            Wallet   @relation(fields: [walletId], references: [id], onDelete: Cascade)
+  
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+  confirmedAt       DateTime? @map("confirmed_at")
+  
+  @@index([walletId])
+  @@index([txHash])
+  @@index([status])
+  @@index([type])
+  @@index([createdAt])
+  @@map("wallet_transactions")
+}
+
+model Payment {
+  id                String   @id @default(uuid())
+  userId            String   @map("user_id")
+  type              String   // "deposit", "withdrawal"
+  amount            Decimal  @db.Decimal(20, 8)
+  currency          String   @default("USD")
+  status            String   @default("pending") // "pending", "processing", "completed", "failed", "cancelled"
+  paymentMethod     String   @map("payment_method") // "ach", "wire", "card"
+  stripePaymentId   String?  @unique @map("stripe_payment_id")
+  stripeTransferId  String?  @map("stripe_transfer_id")
+  bankAccountId     String?  @map("bank_account_id")
+  metadata          Json?    @default("{}")
+  errorMessage      String?  @map("error_message") @db.Text
+  processedAt       DateTime? @map("processed_at")
+  
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bankAccount      BankAccount? @relation(fields: [bankAccountId], references: [id])
+  withdrawal       Withdrawal?
+  
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+  
+  @@index([userId])
+  @@index([status])
+  @@index([type])
+  @@index([createdAt])
+  @@index([stripePaymentId])
+  @@map("payments")
+}
+
+model BankAccount {
+  id                String   @id @default(uuid())
+  userId            String   @map("user_id")
+  plaidItemId       String?  @unique @map("plaid_item_id")
+  plaidAccountId    String?  @map("plaid_account_id")
+  accountType       String   @map("account_type") // "checking", "savings"
+  accountNumber     String?  @map("account_number") // Last 4 digits only
+  routingNumber     String?  @map("routing_number")
+  bankName          String?  @map("bank_name")
+  accountName       String?  @map("account_name")
+  verified          Boolean  @default(false)
+  verificationMethod String? @map("verification_method") // "micro_deposits", "instant"
+  isDefault         Boolean  @default(false) @map("is_default")
+  encryptedData     String?  @map("encrypted_data") @db.Text // Encrypted sensitive data
+  
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  payments          Payment[]
+  withdrawals      Withdrawal[]
+  
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+  
+  @@index([userId])
+  @@index([verified])
+  @@index([isDefault])
+  @@map("bank_accounts")
+}
+
+model Withdrawal {
+  id                String   @id @default(uuid())
+  userId            String   @map("user_id")
+  paymentId         String   @unique @map("payment_id")
+  bankAccountId     String   @map("bank_account_id")
+  amount            Decimal  @db.Decimal(20, 8)
+  currency          String   @default("USD")
+  status            String   @default("pending") // "pending", "processing", "completed", "failed", "cancelled"
+  stripeTransferId  String?  @map("stripe_transfer_id")
+  estimatedArrival  DateTime? @map("estimated_arrival")
+  actualArrival     DateTime? @map("actual_arrival")
+  failureReason     String?  @map("failure_reason") @db.Text
+  
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  payment           Payment  @relation(fields: [paymentId], references: [id])
+  bankAccount       BankAccount @relation(fields: [bankAccountId], references: [id])
+  
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+  
+  @@index([userId])
+  @@index([status])
+  @@index([createdAt])
+  @@map("withdrawals")
+}
+
+model Session {
+  id                String   @id @default(uuid())
+  userId            String   @map("user_id")
+  token             String   @unique
+  deviceInfo        String?  @map("device_info")
+  ipAddress         String?  @map("ip_address")
+  userAgent         String?  @map("user_agent")
+  lastActivityAt    DateTime @default(now()) @map("last_activity_at")
+  expiresAt         DateTime @map("expires_at")
+  revoked           Boolean  @default(false)
+  revokedAt         DateTime? @map("revoked_at")
+  
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+  
+  @@index([userId])
+  @@index([token])
+  @@index([expiresAt])
+  @@index([revoked])
+  @@map("sessions")
+}
